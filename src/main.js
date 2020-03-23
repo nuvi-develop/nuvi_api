@@ -5,8 +5,16 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const cors = require('cors')
+
+const corsOptions = {
+    origin: '*'
+}
 
 var app = express();
+
+
+app.use(cors(corsOptions))
 
 app.use(logger('dev'));
 app.use(express.json());
