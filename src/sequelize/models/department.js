@@ -3,21 +3,16 @@ module.exports = (sequelize, DataTypes) => {
   const Department = sequelize.define(
     "Department",
     {
-      id: {
-        type: DataTypes.SMALLINT.UNSIGNED,
-        primaryKey: true,
-        autoIncrement: true
-      },
       name: DataTypes.STRING,
       logo: DataTypes.STRING,
       region: DataTypes.STRING,
       type: DataTypes.STRING,
-      total_number: DataTypes.INTEGER
+      totalNumber: DataTypes.INTEGER
     },
     {}
   );
   Department.associate = function(models) {
-    Department.hasMany(models.User);
+    Department.hasMany(models.User, { foreignKey: "DepartmentId" });
     Department.hasMany(models.Plate);
     Department.hasMany(models.PlateWaste);
     Department.hasMany(models.OverMadeWaste);
@@ -26,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     Department.hasMany(models.ExpectEatVolume);
     Department.hasMany(models.ExpectEatNumber);
     Department.hasMany(models.MenuList);
+    Department.hasMany(models.OrgFilter);
   };
   return Department;
 };

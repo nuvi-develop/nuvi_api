@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const ExpectEatVolume = sequelize.define(
     "ExpectEatVolume",
     {
-      expect_date: DataTypes.DATEONLY,
+      expectDate: DataTypes.DATEONLY,
       bld: DataTypes.CHAR(1),
       expectVolume: DataTypes.SMALLINT.UNSIGNED,
       realVolume: DataTypes.SMALLINT.UNSIGNED

@@ -1,16 +1,20 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Kiosk = sequelize.define('Kiosk', {
-    serial_number:DataTypes.STRING,
-    start_date: DataTypes.DATEONLY,
-    end_date:DataTypes.DATEONLY,
-    isUsed: DataTypes.BOOLEAN
-  }, {});
+  const Kiosk = sequelize.define(
+    "Kiosk",
+    {
+      serialNumber: DataTypes.STRING,
+      startDate: DataTypes.DATEONLY,
+      endDate: DataTypes.DATEONLY,
+      isUsed: DataTypes.BOOLEAN
+    },
+    {}
+  );
   Kiosk.associate = function(models) {
-    Kiosk.belongsTo(models.Department)
+    Kiosk.belongsTo(models.Department);
 
-    Kiosk.hasMany(models.Plate,{as:'kiosk_in'})
-    Kiosk.hasMany(models.Plate,{as:'kiosk_out'})
+    Kiosk.hasMany(models.Plate, { foreignKey: "kiosk_in_id" });
+    Kiosk.hasMany(models.Plate, { foreignKey: "kiosk_out_id" });
   };
   return Kiosk;
 };

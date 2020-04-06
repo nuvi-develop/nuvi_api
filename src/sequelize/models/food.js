@@ -3,9 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const Food = sequelize.define(
     "Food",
     {
-      food_name: DataTypes.STRING,
+      foodName: DataTypes.STRING,
       information: DataTypes.STRING,
-      serving_amount: DataTypes.FLOAT
+      servingAmount: DataTypes.FLOAT
     },
     {
       underscored: true
@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     Food.hasMany(models.OverMadeWaste);
     Food.hasMany(models.KitchenWaste);
     Food.hasMany(models.ExpectEatVolume);
-    Food.hasMany(models.ExpectEatNumber);
 
     Food.belongsToMany(models.MenuList, { through: models.MenuFoodJunction });
   };

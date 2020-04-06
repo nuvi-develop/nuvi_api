@@ -1,14 +1,18 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const OverMadeWaste = sequelize.define('OverMadeWaste', {
-    eat_date: DataTypes.DATEONLY,
-    bld: DataTypes.BOOLEAN,
-    volume: DataTypes.FLOAT,
-    picure_name: DataTypes.STRING
-  }, {});
+  const OverMadeWaste = sequelize.define(
+    "OverMadeWaste",
+    {
+      eatdate: DataTypes.DATEONLY,
+      bld: DataTypes.BOOLEAN,
+      volume: DataTypes.FLOAT,
+      picureName: DataTypes.STRING
+    },
+    {}
+  );
   OverMadeWaste.associate = function(models) {
-    OverMadeWaste.belongsTo(models.Food)
-    OverMadeWaste.belongsTo(models.Department)
+    OverMadeWaste.belongsTo(models.Food);
+    OverMadeWaste.belongsTo(models.Department);
   };
   return OverMadeWaste;
 };

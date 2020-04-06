@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const MenuList = sequelize.define(
     "MenuList",
     {
-      menu_date: DataTypes.DATEONLY,
+      menuDate: DataTypes.DATEONLY,
       bld: DataTypes.CHAR(1)
     },
     {}
