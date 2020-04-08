@@ -1,9 +1,9 @@
 import express from "express";
 
-import { updatePassword } from "./mail.controller";
+import { sendTempPassword } from "./mail.controller";
 
 const router = express.Router();
 
-router.post("/updatePassword", updatePassword);
+router.post("/sendTempPassword", sendTempPassword);
 
 export default router;

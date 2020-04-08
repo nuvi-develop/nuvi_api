@@ -4,7 +4,7 @@ import smtpPool from "nodemailer-smtp-pool";
 import { wrapperAsync } from "@/routes/api/helper";
 import { mailInfo } from "@/config";
 
-export const updatePassword = wrapperAsync(async (req, res, next) => {
+export const sendTempPassword = wrapperAsync(async (req, res, next) => {
   const { emailAddress, htmlMessage } = req.body;
 
   const config = {

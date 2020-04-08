@@ -102,7 +102,7 @@ export const checkUserPassword = ({ userWithPassword, password }) => {
 export const getUserWithEmail = async emailAddress => {
   const userObj = await User.findOne({
     where: { emailAddress },
-    include: { model: Department, attributes: ["name", "logo"] }
+    include: { model: Department, attributes: ["name", "logo", "totalNumber"] }
   });
   return userObj ? userObj.dataValues : null;
 };

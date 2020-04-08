@@ -32,8 +32,6 @@ module.exports = (sequelize, DataTypes) => {
 
   UserTraditional.verify = (inputPassword, encryptedPassword) => {
     const encryptedInput = encrypt(inputPassword);
-    console.log("encryptedInput", encryptedInput);
-    console.log("encryptedPassword", encryptedPassword);
     return encryptedInput === encryptedPassword;
   };
 
