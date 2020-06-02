@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     Department.hasMany(models.ExpectEatNumber);
     Department.hasMany(models.MenuList);
     Department.hasMany(models.OrgFilter);
+    Department.hasMany(models.InventoryCategory);
   };
   return Department;
 };

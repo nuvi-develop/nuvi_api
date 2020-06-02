@@ -3,7 +3,18 @@ module.exports = (sequelize, DataTypes) => {
   const PersonalInfoLog = sequelize.define(
     "PersonalInfoLog",
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        primaryKey: true
+      },
       personalNumber: DataTypes.STRING,
+
       facePicture: DataTypes.STRING,
       job: DataTypes.STRING,
 

@@ -6,7 +6,9 @@ import { secret } from "@/config";
 export const authMiddleware = wrapperAsync(async (req, res, next) => {
   const token = req.headers["x-access-token"];
   if (!token) {
-    throw new Error("Not logged in!");
+    const error = new Error("Not logged in!");
+    error.status = 403;
+    throw error;
   }
   const decoded = jwt.verify(token, secret);
 
