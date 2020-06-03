@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import produce from "immer";
 
 import {
   InventoryCategory,
@@ -7,6 +8,7 @@ import {
 } from "@/sequelize/models";
 
 import { wrapperAsync } from "@/routes/api/helper";
+import { sequelize } from "../../../sequelize/models";
 
 export const getAllIngredients = wrapperAsync(async (req, res) => {
   const { departmentId } = req.params;
@@ -40,15 +42,38 @@ export const getFilteredIngredients = wrapperAsync(async (req, res) => {
 
 export const getIngredientByPk = wrapperAsync(async (req, res) => {
   const { ingredientId } = req.params;
-  const { limit } = req.query;
-  const ingredient = await InventoryIngredient.findOne({
+
+  const ingredientRes = await InventoryIngredient.findOne({
     where: { id: ingredientId },
-    include: [
-      { model: InventoryLog, limit: limit ? +limit : null },
-      InventoryCategory
-    ]
+    include: [InventoryCategory]
   });
-  res.json(ingredient);
+
+  res.json(ingredientRes);
+});
+
+export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
+  const { ingredientId } = req.params;
+  const { limit } = req.query;
+
+  const ingredientLogRes = await InventoryLog.findAll({
+    where: { InventoryIngredientId: ingredientId },
+    limit: limit ? +limit : null,
+    order: [["created_at", "DESC"]]
+  });
+
+  res.json(ingredientLogRes);
+});
+
+export const getIngredientRecentLogByPk = wrapperAsync(async (req, res) => {
+  const { ingredientId } = req.params;
+
+  const ingredientRecentLogRes = await InventoryLog.findAll({
+    where: { InventoryIngredientId: ingredientId },
+    limit: 1,
+    order: [["created_at", "DESC"]]
+  });
+
+  res.json(ingredientRecentLogRes?.[0]);
 });
 
 export const getInventoryLog = wrapperAsync(async (req, res) => {
