@@ -53,12 +53,13 @@ export const getIngredientByPk = wrapperAsync(async (req, res) => {
 
 export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
   const { ingredientId } = req.params;
-  const { limit } = req.query;
+  const { limit, offset } = req.query;
 
   const ingredientLogRes = await InventoryLog.findAll({
     where: { InventoryIngredientId: ingredientId },
     limit: limit ? +limit : null,
-    order: [["created_at", "DESC"]]
+    order: [["created_at", "DESC"]],
+    offset: offset ? +offset : 0
   });
 
   res.json(ingredientLogRes);
@@ -74,18 +75,6 @@ export const getIngredientRecentLogByPk = wrapperAsync(async (req, res) => {
   });
 
   res.json(ingredientRecentLogRes?.[0]);
-});
-
-export const getInventoryLog = wrapperAsync(async (req, res) => {
-  const { ingredientId } = req.params;
-  const { limit } = req.query;
-  const inventoryLogs = await InventoryLog.findAll({
-    where: {
-      InventoryIngredientId: ingredientId
-    },
-    limit: limit ? +limit : null
-  });
-  res.json(inventoryLogs);
 });
 
 export const getAllInventoryCategory = wrapperAsync(async (req, res) => {

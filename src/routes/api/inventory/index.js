@@ -26,8 +26,6 @@ router.get(
   getIngredientRecentLogByPk
 );
 
-router.get("/log/ingredientId/:ingredientId", getInventoryLog);
-
 router.get("/allCategory/departmentId/:departmentId", getAllInventoryCategory);
 
 export default router;
