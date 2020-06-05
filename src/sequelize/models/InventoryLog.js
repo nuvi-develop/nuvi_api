@@ -9,13 +9,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true
       },
-      created_at: {
+      recordDate: {
         type: DataTypes.DATE,
         primaryKey: true
       },
       order: DataTypes.INTEGER,
       use: DataTypes.INTEGER,
-      stock: DataTypes.INTEGER
+      stock: DataTypes.INTEGER,
+      cost: DataTypes.INTEGER
     },
     {}
   );

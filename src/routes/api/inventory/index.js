@@ -7,7 +7,10 @@ import {
   getAllInventoryCategory,
   getIngredientByPk,
   getIngredientLogsByPk,
-  getIngredientRecentLogByPk
+  getIngredientRecentLogByPk,
+  getIngredientsOfCategories,
+  addIngredient,
+  addIngredientLog
 } from "./inventory.controller";
 
 const router = express.Router();
@@ -27,5 +30,13 @@ router.get(
 );
 
 router.get("/allCategory/departmentId/:departmentId", getAllInventoryCategory);
+
+router.get(
+  "/ingredientsOfCategories/departmentId/:departmentId/name/:nameFilter",
+  getIngredientsOfCategories
+);
+
+router.post("/ingredientLog", addIngredientLog);
+router.post("/ingredient", addIngredient);
 
 export default router;

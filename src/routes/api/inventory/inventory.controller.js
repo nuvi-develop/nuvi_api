@@ -29,7 +29,7 @@ export const getFilteredIngredients = wrapperAsync(async (req, res) => {
       name:
         nameFilter === " "
           ? { [Op.not]: null }
-          : { [Op.substring]: decodeURI(nameFilter) },
+          : { [Op.substring]: nameFilter },
       InventoryCategoryId:
         categoryId === "all" ? { [Op.not]: null } : categoryId
     },
@@ -86,4 +86,52 @@ export const getAllInventoryCategory = wrapperAsync(async (req, res) => {
     limit: limit ? +limit : null
   });
   res.json(categories);
+});
+
+export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
+  const { departmentId, nameFilter } = req.params;
+  const { limit, offset } = req.query;
+  const categories = await InventoryCategory.findAll({
+    where: {
+      DepartmentId: departmentId
+    },
+    attributes: ["id", "name"],
+    limit: limit ? +limit : null,
+    offset: offset ? +offset : 0
+  });
+
+  const ingredientsOfCategories = await Promise.all(
+    categories.map(async category => {
+      const ingredients = await category.getInventoryIngredients({
+        where: {
+          name:
+            nameFilter === " "
+              ? { [Op.not]: null }
+              : { [Op.substring]: nameFilter }
+        },
+        include: {
+          model: InventoryLog,
+          limit: 1,
+          order: [["created_at", "DESC"]]
+        }
+      });
+      return {
+        category: category,
+        ingredients
+      };
+    })
+  );
+  res.json(ingredientsOfCategories);
+});
+
+export const addIngredientLog = wrapperAsync(async (req, res) => {
+  const { ingredientLogInfo } = req.body;
+  const inventoryLogObj = await InventoryLog.create(ingredientLogInfo);
+  const createdInventoryLog = inventoryLogObj.dataValues;
+  res.json(createdInventoryLog);
+});
+export const addIngredient = wrapperAsync(async (req, res) => {
+  const { ingredientInfo } = req.body;
+  console.log("ingredientInfo", ingredientInfo);
+  res.json();
 });

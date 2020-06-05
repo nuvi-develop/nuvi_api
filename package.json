@@ -17,7 +17,7 @@
     "seed:inventoryCategory": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062432-demo-inventoryCategory && cd ../..",
     "seed:inventoryIngredient": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062446-demo-inventoryIngredient && cd ../..",
     "seed:inventoryLog": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062450-demo-inventoryLog && cd ../..",
-    "seed:all": "npm run seed:department seed:inventoryCategory seed:inventoryIngredient seed:inventoryLog"
+    "seed:all": "npm run seed:department && npm run seed:inventoryCategory &&npm run seed:inventoryIngredient &&npm run seed:inventoryLog"
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",

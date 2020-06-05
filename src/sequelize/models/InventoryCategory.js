@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   InventoryCategory.associate = function(models) {
     InventoryCategory.belongsTo(models.Department);
+    InventoryCategory.hasMany(models.InventoryIngredient);
   };
   return InventoryCategory;
 };
