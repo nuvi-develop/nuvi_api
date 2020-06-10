@@ -58,7 +58,7 @@ export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
   const ingredientLogRes = await InventoryLog.findAll({
     where: { InventoryIngredientId: ingredientId },
     limit: limit ? +limit : null,
-    order: [["created_at", "DESC"]],
+    order: [["recordDate", "DESC"]],
     offset: offset ? +offset : 0
   });
 
@@ -71,7 +71,7 @@ export const getIngredientRecentLogByPk = wrapperAsync(async (req, res) => {
   const ingredientRecentLogRes = await InventoryLog.findAll({
     where: { InventoryIngredientId: ingredientId },
     limit: 1,
-    order: [["created_at", "DESC"]]
+    order: [["recordDate", "DESC"]]
   });
 
   res.json(ingredientRecentLogRes?.[0]);
@@ -132,6 +132,24 @@ export const addIngredientLog = wrapperAsync(async (req, res) => {
 });
 export const addIngredient = wrapperAsync(async (req, res) => {
   const { ingredientInfo } = req.body;
-  console.log("ingredientInfo", ingredientInfo);
+  const ingredientObj = await InventoryIngredient.create(ingredientInfo);
+  const createdIngredient = ingredientObj.dataValues;
+  const createdIngredientId = createdIngredient.id;
+  const ingredientLogObj = await InventoryLog.create({
+    recordDate: new Date(),
+    order: 0,
+    use: 0,
+    stock: 0,
+    cost: 0,
+    InventoryIngredientId: createdIngredientId
+  });
+  const createdIngredientLog = ingredientLogObj.dataValues;
+  res.json({ createdIngredient, createdIngredientLog });
+});
+
+export const editIngredientLog = wrapperAsync(async (req, res) => {
+  const { editLogInfo } = req.body;
+  const { name, oldValue, newValue, logId } = editLogInfo;
+  console.log("editLogInfo", editLogInfo);
   res.json();
 });

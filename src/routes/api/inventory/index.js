@@ -10,7 +10,8 @@ import {
   getIngredientRecentLogByPk,
   getIngredientsOfCategories,
   addIngredient,
-  addIngredientLog
+  addIngredientLog,
+  editIngredientLog
 } from "./inventory.controller";
 
 const router = express.Router();
@@ -38,5 +39,6 @@ router.get(
 
 router.post("/ingredientLog", addIngredientLog);
 router.post("/ingredient", addIngredient);
+router.patch("/ingredientLog", editIngredientLog);
 
 export default router;
