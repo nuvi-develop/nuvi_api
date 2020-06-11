@@ -191,18 +191,16 @@ export const editIngredientLog = wrapperAsync(async (req, res) => {
     use: +oldValue - newValue,
     cost: 0
   };
+
   console.log("editLogInfo", editLogInfo);
-  const editedObject = await InventoryLog.update(
-    {
-      [name]: newValue,
-      stockDelta: sequelize.col("stock_delta") + deltaAdjustment[name]
-    },
-    {
-      where: {
-        id: logId
-      }
-    }
-  );
+  const inventoryLogToUpdate = await InventoryLog.findByPk(logId);
+  const oldStockDelta = inventoryLogToUpdate.dataValues.stockDelta;
+  console.log("oldStockDelta", oldStockDelta);
+  console.log("deltaAdjustment[name]", deltaAdjustment[name]);
+  const editedObject = await inventoryLogToUpdate.update({
+    [name]: newValue,
+    stockDelta: oldStockDelta + deltaAdjustment[name]
+  });
   const editedLog = editedObject.dataValues;
   res.json({ editedLog });
 });
