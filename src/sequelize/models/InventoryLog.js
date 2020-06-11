@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       order: DataTypes.INTEGER,
       use: DataTypes.INTEGER,
-      stock: DataTypes.INTEGER,
+      stockDelta: DataTypes.INTEGER,
       cost: DataTypes.INTEGER
     },
     {}

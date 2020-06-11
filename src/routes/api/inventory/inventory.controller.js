@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import produce from "immer";
+import { add } from "date-fns";
 
 import {
   InventoryCategory,
@@ -45,7 +46,16 @@ export const getIngredientByPk = wrapperAsync(async (req, res) => {
 
   const ingredientRes = await InventoryIngredient.findOne({
     where: { id: ingredientId },
-    include: [InventoryCategory]
+
+    include: [
+      {
+        model: InventoryLog,
+        attributes: [
+          [sequelize.fn("sum", sequelize.col("stock_delta")), "currentStock"]
+        ]
+      },
+      InventoryCategory
+    ]
   });
 
   res.json(ingredientRes);
@@ -61,8 +71,33 @@ export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
     order: [["recordDate", "DESC"]],
     offset: offset ? +offset : 0
   });
+  const recentDate = ingredientLogRes?.[0]?.recentDate;
 
   res.json(ingredientLogRes);
+});
+
+export const getIngredientCurrentStock = wrapperAsync(async (req, res) => {
+  const { recordDate, ingredientId } = req.params;
+  const currentTimezoneOffset = new Date().getTimezoneOffset();
+  //new Date 시 utc 로 변환이 일어나는 것을 상쇄시킴.
+  // const date = add(new Date(recordDate), { minutes: -currentTimezoneOffset });
+  const date = new Date(recordDate);
+
+  const ingredientInventoryLog = await InventoryLog.findAll({
+    where: {
+      recordDate: { [Op.lte]: date },
+      InventoryIngredientId: ingredientId
+    }
+  });
+
+  const currentStock = await InventoryLog.sum("stock_delta", {
+    where: {
+      recordDate: { [Op.lte]: date },
+      InventoryIngredientId: ingredientId
+    }
+  });
+
+  res.json({ currentStock, ingredientInventoryLog });
 });
 
 export const getIngredientRecentLogByPk = wrapperAsync(async (req, res) => {
@@ -135,11 +170,12 @@ export const addIngredient = wrapperAsync(async (req, res) => {
   const ingredientObj = await InventoryIngredient.create(ingredientInfo);
   const createdIngredient = ingredientObj.dataValues;
   const createdIngredientId = createdIngredient.id;
+  //TODO 재료만들때 초기LOG 생성하던것 지우기 (stock 표시해주려고 했던것임)
   const ingredientLogObj = await InventoryLog.create({
     recordDate: new Date(),
     order: 0,
     use: 0,
-    stock: 0,
+    stockDelta: 0,
     cost: 0,
     InventoryIngredientId: createdIngredientId
   });
@@ -150,6 +186,23 @@ export const addIngredient = wrapperAsync(async (req, res) => {
 export const editIngredientLog = wrapperAsync(async (req, res) => {
   const { editLogInfo } = req.body;
   const { name, oldValue, newValue, logId } = editLogInfo;
+  const deltaAdjustment = {
+    order: +newValue - oldValue,
+    use: +oldValue - newValue,
+    cost: 0
+  };
   console.log("editLogInfo", editLogInfo);
-  res.json();
+  const editedObject = await InventoryLog.update(
+    {
+      [name]: newValue,
+      stockDelta: sequelize.col("stock_delta") + deltaAdjustment[name]
+    },
+    {
+      where: {
+        id: logId
+      }
+    }
+  );
+  const editedLog = editedObject.dataValues;
+  res.json({ editedLog });
 });
