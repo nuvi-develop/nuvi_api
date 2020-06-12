@@ -146,6 +146,14 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
         },
         include: {
           model: InventoryLog,
+          attributes: {
+            include: [
+              [
+                sequelize.fn("sum", sequelize.col("stock_delta")),
+                "currentStock"
+              ]
+            ]
+          },
           limit: 1,
           order: [["created_at", "DESC"]]
         }
@@ -192,15 +200,31 @@ export const editIngredientLog = wrapperAsync(async (req, res) => {
     cost: 0
   };
 
-  console.log("editLogInfo", editLogInfo);
   const inventoryLogToUpdate = await InventoryLog.findByPk(logId);
   const oldStockDelta = inventoryLogToUpdate.dataValues.stockDelta;
-  console.log("oldStockDelta", oldStockDelta);
-  console.log("deltaAdjustment[name]", deltaAdjustment[name]);
   const editedObject = await inventoryLogToUpdate.update({
     [name]: newValue,
     stockDelta: oldStockDelta + deltaAdjustment[name]
   });
   const editedLog = editedObject.dataValues;
   res.json({ editedLog });
+});
+
+export const deleteIngredientLog = wrapperAsync(async (req, res) => {
+  const { ingredientLogId } = req.params;
+
+  const deletedIngrediengLog = await InventoryLog.destroy({
+    where: { id: ingredientLogId }
+  });
+
+  res.json(deletedIngrediengLog);
+});
+
+export const deleteIngredient = wrapperAsync(async (req, res) => {
+  const { ingredientId } = req.params;
+
+  const deletedIngredient = await InventoryIngredient.destroy({
+    where: { id: ingredientId }
+  });
+  res.json(deletedIngredient);
 });

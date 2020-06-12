@@ -12,7 +12,9 @@ import {
   addIngredient,
   addIngredientLog,
   editIngredientLog,
-  getIngredientCurrentStock
+  getIngredientCurrentStock,
+  deleteIngredientLog,
+  deleteIngredient
 } from "./inventory.controller";
 
 const router = express.Router();
@@ -46,5 +48,12 @@ router.get(
 router.post("/ingredientLog", addIngredientLog);
 router.post("/ingredient", addIngredient);
 router.patch("/ingredientLog", editIngredientLog);
+
+router.delete(
+  "/ingredientLog/ingredientLogId/:ingredientLogId",
+  deleteIngredientLog
+);
+
+router.delete("/ingredient/ingredientId/:ingredientId", deleteIngredient);
 
 export default router;
