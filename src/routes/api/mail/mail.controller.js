@@ -17,6 +17,7 @@ export const sendTempPassword = wrapperAsync(async (req, res, next) => {
       }
     }
   };
+  console.log("config", config);
   const mailOption = {
     from: mailInfo.user,
     to: emailAddress,

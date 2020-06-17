@@ -78,7 +78,7 @@ export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
 
 export const getIngredientCurrentStock = wrapperAsync(async (req, res) => {
   const { recordDate, ingredientId } = req.params;
-  const currentTimezoneOffset = new Date().getTimezoneOffset();
+  // const currentTimezoneOffset = new Date().getTimezoneOffset();
   //new Date 시 utc 로 변환이 일어나는 것을 상쇄시킴.
   // const date = add(new Date(recordDate), { minutes: -currentTimezoneOffset });
   const date = new Date(recordDate);
