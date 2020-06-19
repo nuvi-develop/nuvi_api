@@ -135,6 +135,8 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
     offset: offset ? +offset : 0
   });
 
+  console.log('nameFilter===" "', nameFilter === " ");
+
   const ingredientsOfCategories = await Promise.all(
     categories.map(async category => {
       const ingredients = await category.getInventoryIngredients({
@@ -164,6 +166,7 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
       };
     })
   );
+  console.log("ingredientsOfCategories", ingredientsOfCategories);
   res.json(ingredientsOfCategories);
 });
 
@@ -179,16 +182,16 @@ export const addIngredient = wrapperAsync(async (req, res) => {
   const createdIngredient = ingredientObj.dataValues;
   const createdIngredientId = createdIngredient.id;
   //TODO 재료만들때 초기LOG 생성하던것 지우기 (stock 표시해주려고 했던것임)
-  const ingredientLogObj = await InventoryLog.create({
-    recordDate: new Date(),
-    order: 0,
-    use: 0,
-    stockDelta: 0,
-    cost: 0,
-    InventoryIngredientId: createdIngredientId
-  });
-  const createdIngredientLog = ingredientLogObj.dataValues;
-  res.json({ createdIngredient, createdIngredientLog });
+  // const ingredientLogObj = await InventoryLog.create({
+  //   recordDate: new Date(),
+  //   order: 0,
+  //   use: 0,
+  //   stockDelta: 0,
+  //   cost: 0,
+  //   InventoryIngredientId: createdIngredientId
+  // });
+  // const createdIngredientLog = ingredientLogObj.dataValues;
+  res.json({ createdIngredient });
 });
 
 export const editIngredientLog = wrapperAsync(async (req, res) => {
@@ -230,7 +233,7 @@ export const deleteIngredient = wrapperAsync(async (req, res) => {
 });
 
 export const isSameIngredient = wrapperAsync(async (req, res) => {
-  const { ingredientName } = req.params;
+  const { ingredientName } = req.query;
   const ingredient = await InventoryIngredient.findOne({
     where: { name: ingredientName }
   });

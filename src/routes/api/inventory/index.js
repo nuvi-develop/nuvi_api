@@ -57,6 +57,6 @@ router.delete(
 
 router.delete("/ingredient/ingredientId/:ingredientId", deleteIngredient);
 
-router.get("/isSame/ingredientName/:ingredientName", isSameIngredient);
+router.get("/isSame/ingredientName", isSameIngredient);
 
 export default router;
