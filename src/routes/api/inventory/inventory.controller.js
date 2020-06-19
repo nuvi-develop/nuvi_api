@@ -228,3 +228,15 @@ export const deleteIngredient = wrapperAsync(async (req, res) => {
   });
   res.json(deletedIngredient);
 });
+
+export const isSameIngredient = wrapperAsync(async (req, res) => {
+  const { ingredientName } = req.params;
+  const ingredient = await InventoryIngredient.findOne({
+    where: { name: ingredientName }
+  });
+  if (ingredient) {
+    res.json(true);
+  } else {
+    res.json(false);
+  }
+});
