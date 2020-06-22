@@ -135,8 +135,6 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
     offset: offset ? +offset : 0
   });
 
-  console.log('nameFilter===" "', nameFilter === " ");
-
   const ingredientsOfCategories = await Promise.all(
     categories.map(async category => {
       const ingredients = await category.getInventoryIngredients({
@@ -152,6 +150,7 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
             include: [
               [
                 sequelize.fn("sum", sequelize.col("stock_delta")),
+
                 "currentStock"
               ]
             ]
@@ -160,13 +159,26 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
           order: [["created_at", "DESC"]]
         }
       });
+
+      // const ingredientsWithLog = await Promise.all(
+      //   ingredients.map(async ingredient => {
+      //     const ingredientLogs = await ingredient.getInventoryLogs();
+      //     console.log("ingredientLogs", ingredientLogs);
+      //     const ingredientWithLog = {
+      //       ...ingredient,
+      //       ingredientLogs
+      //     };
+      //     return ingredientWithLog;
+      //   })
+      // );
+
       return {
         category: category,
         ingredients
       };
     })
   );
-  console.log("ingredientsOfCategories", ingredientsOfCategories);
+
   res.json(ingredientsOfCategories);
 });
 
@@ -181,16 +193,17 @@ export const addIngredient = wrapperAsync(async (req, res) => {
   const ingredientObj = await InventoryIngredient.create(ingredientInfo);
   const createdIngredient = ingredientObj.dataValues;
   const createdIngredientId = createdIngredient.id;
-  //TODO 재료만들때 초기LOG 생성하던것 지우기 (stock 표시해주려고 했던것임)
-  // const ingredientLogObj = await InventoryLog.create({
-  //   recordDate: new Date(),
-  //   order: 0,
-  //   use: 0,
-  //   stockDelta: 0,
-  //   cost: 0,
-  //   InventoryIngredientId: createdIngredientId
-  // });
-  // const createdIngredientLog = ingredientLogObj.dataValues;
+  // TODO 재료만들때 초기LOG 생성하던것 지우기 (stock 표시해주려고 했던것임)
+  // 여전히 넣어야 할듯..
+  const ingredientLogObj = await InventoryLog.create({
+    recordDate: new Date(),
+    order: 0,
+    use: 0,
+    stockDelta: 0,
+    cost: 0,
+    InventoryIngredientId: createdIngredientId
+  });
+  const createdIngredientLog = ingredientLogObj.dataValues;
   res.json({ createdIngredient });
 });
 
