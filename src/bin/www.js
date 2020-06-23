@@ -25,21 +25,26 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-let query = "SET FOREIGN_KEY_CHECKS = 1",
-  syncOptions = {};
-if (env === "development") {
-  query = "SET FOREIGN_KEY_CHECKS = 0";
-  syncOptions = { force: true };
-}
+/**
+ *  기존에 foreingKey 문제발생 혹은 database sync 용으로 사용했던 코드
+ *  development 모드로 실행하면 무조건 table drop 해버리므로 위험해서 사용하지 않음.
+ */
 
-sequelize.query(query).then(() => {
-  sequelize.sync(syncOptions).then(() => {
-    server.listen(port);
-    server.on("error", onError);
-    server.on("listening", onListening);
-    if (!process.env.PORT) console.log(`listening on localhost:${port}`);
-  });
+// let query = "SET FOREIGN_KEY_CHECKS = 1",
+const syncOptions = {};
+// if (env === "development") {
+//   query = "SET FOREIGN_KEY_CHECKS = 0";
+//   syncOptions = { force: true };
+// }
+
+// sequelize.query(query).then(() => {
+sequelize.sync(syncOptions).then(() => {
+  server.listen(port);
+  server.on("error", onError);
+  server.on("listening", onListening);
+  if (!process.env.PORT) console.log(`listening on localhost:${port}`);
 });
+// });
 
 /**
  * Normalize a port into a number, string, or false.
