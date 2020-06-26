@@ -66,7 +66,10 @@ export const getIngredientLogsByPk = wrapperAsync(async (req, res) => {
   const { limit, offset } = req.query;
 
   const ingredientLogRes = await InventoryLog.findAll({
-    where: { InventoryIngredientId: ingredientId },
+    where: {
+      InventoryIngredientId: ingredientId,
+      [Op.not]: { [Op.and]: [{ order: 0 }, { use: 0 }] }
+    },
     limit: limit ? +limit : null,
     order: [["recordDate", "DESC"]],
     offset: offset ? +offset : 0
