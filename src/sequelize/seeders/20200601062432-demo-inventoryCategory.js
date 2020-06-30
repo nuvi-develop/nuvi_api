@@ -37,6 +37,21 @@ module.exports = {
         id: 7,
         name: "간식",
         department_id: 1
+      },
+      {
+        id: 8,
+        name: "조미료",
+        department_id: 1
+      },
+      {
+        id: 9,
+        name: "우유류",
+        department_id: 1
+      },
+      {
+        id: 10,
+        name: "기타",
+        department_id: 1
       }
     ]);
   },

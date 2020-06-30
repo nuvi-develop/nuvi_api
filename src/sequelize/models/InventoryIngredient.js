@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     InventoryIngredient.belongsTo(models.InventoryCategory);
     InventoryIngredient.belongsTo(models.Department);
     InventoryIngredient.hasMany(models.InventoryLog);
+    InventoryIngredient.belongsTo(models.IngredientUnit);
   };
   return InventoryIngredient;
 };

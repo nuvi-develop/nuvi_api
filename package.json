@@ -13,15 +13,19 @@
     "dev:light": "NODE_ENV=development_light npm-run-all server",
     "prod": "NODE_ENV=production npm-run-all build server:prod",
     "whatch:dev": "nodemon",
+    "migrate": "cd src/sequelize && npx sequelize-cli db:migrate",
+    "migrate:production": "NODE_ENV=production npm run migrate",
     "seed:department": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200325125309-demo-department && cd ../..",
     "seed:department:production": "NODE_ENV=production npm run seed:department",
+    "seed:unit": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062432-demo-ingredientUnits && cd ../..",
+    "seed:unit:production": "NODE_ENV=production npm run seed:unit",
     "seed:inventoryCategory": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062432-demo-inventoryCategory && cd ../..",
     "seed:inventoryCategory:production": "NODE_ENV=production npm run seed:inventoryCategory",
     "seed:inventoryIngredient": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062446-demo-inventoryIngredient && cd ../..",
     "seed:inventoryLog": "cd src/sequelize && npx sequelize-cli db:seed --seed 20200601062450-demo-inventoryLog && cd ../..",
-    "seed:all": "npm run seed:department && npm run seed:inventoryCategory &&npm run seed:inventoryIngredient &&npm run seed:inventoryLog",
-    "sync:databse:development": "NODE_ENV=development babel-node ./src/sequelize/sync",
-    "sync:databse:production": "NODE_ENV=production babel-node ./src/sequelize/sync"
+    "seed:all": "NODE_ENV=development npm run seed:department && npm run seed:unit && npm run seed:inventoryCategory &&npm run seed:inventoryIngredient &&npm run seed:inventoryLog",
+    "sync:database:development": "NODE_ENV=development babel-node ./src/sequelize/sync",
+    "sync:database:production": "NODE_ENV=production babel-node ./src/sequelize/sync"
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",

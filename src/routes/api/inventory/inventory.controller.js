@@ -5,7 +5,8 @@ import { add } from "date-fns";
 import {
   InventoryCategory,
   InventoryIngredient,
-  InventoryLog
+  InventoryLog,
+  IngredientUnit
 } from "@/sequelize/models";
 
 import { wrapperAsync } from "@/routes/api/helper";
@@ -54,7 +55,8 @@ export const getIngredientByPk = wrapperAsync(async (req, res) => {
           [sequelize.fn("sum", sequelize.col("stock_delta")), "currentStock"]
         ]
       },
-      InventoryCategory
+      InventoryCategory,
+      IngredientUnit
     ]
   });
 
@@ -124,6 +126,11 @@ export const getAllInventoryCategory = wrapperAsync(async (req, res) => {
     limit: limit ? +limit : null
   });
   res.json(categories);
+});
+
+export const getAllUnits = wrapperAsync(async (req, res) => {
+  const units = await IngredientUnit.findAll();
+  res.json(units);
 });
 
 export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {

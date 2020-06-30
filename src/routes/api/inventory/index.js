@@ -15,7 +15,8 @@ import {
   getIngredientCurrentStock,
   deleteIngredientLog,
   deleteIngredient,
-  isSameIngredient
+  isSameIngredient,
+  getAllUnits
 } from "./inventory.controller";
 
 const router = express.Router();
@@ -58,5 +59,7 @@ router.delete(
 router.delete("/ingredient/ingredientId/:ingredientId", deleteIngredient);
 
 router.get("/isSame/ingredientName", isSameIngredient);
+
+router.get("/allUnits", getAllUnits);
 
 export default router;
