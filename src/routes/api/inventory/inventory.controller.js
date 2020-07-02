@@ -266,3 +266,20 @@ export const isSameIngredient = wrapperAsync(async (req, res) => {
     res.json(false);
   }
 });
+
+export const editIngredientOrder = wrapperAsync(async (req, res) => {
+  const { movingInfo } = req.body;
+  const { movingIngredientId, newOrder } = movingInfo;
+  console.log("movingInfo", movingInfo);
+  const editedIngredient = await InventoryIngredient.update(
+    {
+      order: newOrder
+    },
+    {
+      where: {
+        id: movingIngredientId
+      }
+    }
+  );
+  res.json({ editedIngredient });
+});
