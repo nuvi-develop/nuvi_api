@@ -8,9 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeCreate: (user, options) => {
-          const orderNumber = user.id * 10;
-          user.order = orderNumber;
+        afterCreate: async (ingredient, options) => {
+          console.log("ingredient", ingredient);
+          console.log("options", options);
+          const orderNumber = ingredient.dataValues.id * 10;
+
+          await ingredient.update({ order: orderNumber });
         }
       }
     }

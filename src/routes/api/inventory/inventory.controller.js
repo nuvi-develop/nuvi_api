@@ -154,20 +154,23 @@ export const getIngredientsOfCategories = wrapperAsync(async (req, res) => {
               ? { [Op.not]: null }
               : { [Op.substring]: nameFilter }
         },
-        include: {
-          model: InventoryLog,
-          attributes: {
-            include: [
-              [
-                sequelize.fn("sum", sequelize.col("stock_delta")),
+        include: [
+          {
+            model: InventoryLog,
+            attributes: {
+              include: [
+                [
+                  sequelize.fn("sum", sequelize.col("stock_delta")),
 
-                "currentStock"
+                  "currentStock"
+                ]
               ]
-            ]
+            },
+            limit: 1,
+            order: [["created_at", "DESC"]]
           },
-          limit: 1,
-          order: [["created_at", "DESC"]]
-        }
+          IngredientUnit
+        ]
       });
 
       // const ingredientsWithLog = await Promise.all(
