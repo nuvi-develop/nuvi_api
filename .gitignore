@@ -6,5 +6,7 @@ node_modules
 .idea/
 .DS_store
 .vscode
-config
-config.js
+
+
+config_backup.js
+.env
