@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 
+//1
+
 dotenv.config();
 
 export const secret = process.env.SECRET_KEY;
